@@ -21,7 +21,7 @@ We make available the most significant models trained within this work. Specific
 - the best lexicalized model trained on the bigrams and trigrams of the surface forms and the POS tags of the question, of the first context-before and of the first context-after (found within the folder *models*)
 
 ## Scripts
-In the folder *scripts* you can find the main notebooks used for the fine-tuning of the BERT models and the training of the further classifiers. The notebook *QTI - Fine-tuning BERT* can be used to reproduce our fine-tuning of the BERT models. The models themselves can be downloaded from the above links. The embeddings we extracted from each of these models (the CSV embedding of the 11th layer) can be found in the folder *fine-tuned_bert_embeddings*. These files with the embeddings are also necessary to run the other notebook we make available *QTI - Training Further Classifiers*. This notebook also uses the files found in the folder *simple_features_annotations*. 
+In the folder *scripts* you can find the main notebooks used for the fine-tuning of the BERT models and the training of the further classifiers. The notebook *QTI - Fine-tuning BERT* can be used to reproduce our fine-tuning of the BERT models. The models themselves can be downloaded from the above links. The embeddings we extracted from each of these models (the CLS embedding of the 11th layer) can be found in the folder *fine-tuned_bert_embeddings*. These files with the embeddings are also necessary to run the other notebook we make available *QTI - Training Further Classifiers*. This notebook also uses the files found in the folder *simple_features_annotations*. 
 
 
 ## Contact
