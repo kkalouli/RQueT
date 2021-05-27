@@ -41,22 +41,22 @@ df2 = pd.read_csv("cnn-6.csv", sep = ",")
 # open delivered file with the indices of the questions
 df_ids = pd.read_csv("mapped_indices.csv", sep = "\t")
 # open output file where the entire corpus will be written
-output = open("cnn_corpus_all.csv", "w")
+output = open("rquet_all.csv", "w")
 # open output file where only the train split will be written
-output_train = open("cnn_corpus_train.csv", "w")
+output_train = open("rquet_trainset.csv", "w")
 # open output file where only the test split will be written
-output_test = open("cnn_corpus_test.csv", "w")
+output_test = open("rquet_testset.csv", "w")
 
 # the unique ids of the questions that belong to the test split
 test_ids = ["1113088","1113093","1113104","1113105","1113117","1113120","1113128","1113138","1113147","1113176","1113177","1113180","1113185","1113218","1113229","1113240","1113253","1113266","1113270","1113278","1113283","1113308","1113316","1113322","1113332","1113350","1113375","1113380","1113388","1113404","1113407","1113409","1113415","1113418","1113420","1113435","1113440","1113455","1113473","1113490","1113511","1113522","1113536","1113546","1113572","1113574","1113578","1113667","1113677","1113686","1113697","1113703","1113719","1113725","1113731","1113732","1113734","1113737","1113754","1113773","1113866","1113881","1113922","1113926","1113930","1113959","1113970","1113980","1114015","1114031","1114038","1114056","1114058","1114061","1114104","1114124","1114146","1114167","1114171","1114180","1114193","1114196","1114197","1114205","1114224","1114240","1114245","1114283","1114304","1114316","1114327","1114349","1114358","1114360","1114397","1114415","1114417","1114425","1114436","1114452","1114455","1114457","1114473","1114481","1114484","1114487","1114503","1114521","1114531","1114540","1114548","1114563","1114578","1114602","1114620","1114745","1114762","1114769","1114776","1114794","1114827","1114837","1114842","1114860","1114869","1114929","1114939","1114950","1114957","1114963","1114973","1114976","1114977","1114983","1114992","1115020","1115039","1115048","1115052","1115066","1115067","1115071","1115073","1115087","1115089","1115100","1115158","1115163","1115221","1115242","1115246","1115255","1115280","1115284","1115285","1115288","1115316","1115325","1115341","1115369","1115372","1115374","1115397","1115412","1115414","1115418","1115421","1115425","1115430","1115443","1115447","1115454","1115459","1115469","1115480","1115483","1115492","1115523","1115525","1115546"]
 
-output.write("id\tctx_b2\tctx_b2_spe\tctx_b1\tctx_b1_spe\tque\tque_spe\tctx_a1\tctx_a1_spe\tctx_a2\tctx_a2_spe\tlabel\n")
-output_train.write("id\tctx_b2\tctx_b2_spe\tctx_b1\tctx_b1_spe\tque\tque_spe\tctx_a1\tctx_a1_spe\tctx_a2\tctx_a2_spe\tlabel\n")
-output_test.write("id\tctx_b2\tctx_b2_spe\tctx_b1\tctx_b1_spe\tque\tque_spe\tctx_a1\tctx_a1_spe\tctx_a2\tctx_a2_spe\tlabel\n")
+output.write("ID\tctx_before2\tcxt_before2_speaker\tctx_before1\tctx_before1_speaker\tquestion\tquestion_speaker\tctx_after1\tctx_after1_speaker\tctx_after2\tctx_after2_speaker\tgold_label\n")
+output_train.write("ID\tctx_before2\tcxt_before2_speaker\tctx_before1\tctx_before1_speaker\tquestion\tquestion_speaker\tctx_after1\tctx_after1_speaker\tctx_after2\tctx_after2_speaker\tgold_label\n")
+output_test.write("ID\tctx_before2\tcxt_before2_speaker\tctx_before1\tctx_before1_speaker\tquestion\tquestion_speaker\tctx_after1\tctx_after1_speaker\tctx_after2\tctx_after2_speaker\tgold_label\n")
 
 
 
-print ("Creating CNN corpus . . . ")
+print ("Creating RQueT corpus . . . ")
 
 # go through each row of the mapped_indices file in order to map it to real text
 for index, row in df_ids.iterrows():
@@ -78,47 +78,48 @@ for index, row in df_ids.iterrows():
 	# get all information by detecting the exact slices of the text contained in the mapped_indices file
 	# 9 has to be added to the standard index to get the correct portion of the element	
 	# remove space from the beginning of some utterances 
-	counter = 9
+	counter = 8
+	counter_after = 9
 	### question
-	que = text[int(row['que_index'].split(":")[0])+counter:int(row['que_index'].split(":")[1])+counter]
+	que = text[int(row['que_index'].split(":")[0])+counter:int(row['que_index'].split(":")[1])+counter_after]
 	if que.startswith(" "):
-		que = que.replace(" ", "", 1)
-	que_spe = text[int(row['que_speaker_index'].split(":")[0])+counter:int(row['que_speaker_index'].split(":")[1])+counter]
+		que = re.sub(r'^\s+', '', que)
+	que_spe = text[int(row['que_speaker_index'].split(":")[0])+counter:int(row['que_speaker_index'].split(":")[1])+counter_after]
 	### question speaker
 	if que_spe.startswith(" "):
-		que_spe = que_spe.replace(" ", "", 1)
+		que_spe = re.sub(r'^\s+', '', que_spe)
 	### context-before 2
-	ctx_b2 = text[int(row['context_2_index'].split(":")[0])+counter:int(row['context_2_index'].split(":")[1])+counter]
+	ctx_b2 = text[int(row['context_2_index'].split(":")[0])+counter:int(row['context_2_index'].split(":")[1])+counter_after]
 	if ctx_b2.startswith(" "):
-		ctx_b2 = ctx_b2.replace(" ", "", 1)
+		ctx_b2 = re.sub(r'^\s+', '', ctx_b2)
 	### context-before 2 speaker
-	ctx_b2_spe = text[int(row['context_2_speaker_index'].split(":")[0])+counter:int(row['context_2_speaker_index'].split(":")[1])+counter]
+	ctx_b2_spe = text[int(row['context_2_speaker_index'].split(":")[0])+counter:int(row['context_2_speaker_index'].split(":")[1])+counter_after]
 	if ctx_b2_spe.startswith(" "):
-		ctx_b2_spe = ctx_b2_spe.replace(" ", "", 1)
+		ctx_b2_spe = re.sub(r'^\s+', '', ctx_b2_spe)
 	### context-before 1
-	ctx_b1 = text[int(row['context_1_index'].split(":")[0])+counter:int(row['context_1_index'].split(":")[1])+counter]
+	ctx_b1 = text[int(row['context_1_index'].split(":")[0])+counter:int(row['context_1_index'].split(":")[1])+counter_after]
 	if ctx_b1.startswith(" "):
-		ctx_b1 = ctx_b1.replace(" ", "", 1)
+		ctx_b1 = re.sub(r'^\s+', '', ctx_b1)
 	### context-before 1 speaker
-	ctx_b1_spe = text[int(row['context_1_speaker_index'].split(":")[0])+counter:int(row['context_1_speaker_index'].split(":")[1])+counter]
+	ctx_b1_spe = text[int(row['context_1_speaker_index'].split(":")[0])+counter:int(row['context_1_speaker_index'].split(":")[1])+counter_after]
 	if ctx_b1_spe.startswith(" "):
-		ctx_b1_spe = ctx_b1_spe.replace(" ", "", 1)
+		ctx_b1_spe = re.sub(r'^\s+', '', ctx_b1_spe)
 	### context-after 1
-	ctx_a1 = text[int(row['context1_index'].split(":")[0])+counter:int(row['context1_index'].split(":")[1])+counter]
+	ctx_a1 = text[int(row['context1_index'].split(":")[0])+counter:int(row['context1_index'].split(":")[1])+counter_after]
 	if ctx_a1.startswith(" "):
-		ctx_a1 = ctx_a1.replace(" ", "", 1)
+		ctx_a1 = re.sub(r'^\s+', '', ctx_a1)
 	### context-after 1 speaker
-	ctx_a1_spe = text[int(row['context1_speaker_index'].split(":")[0])+counter:int(row['context1_speaker_index'].split(":")[1])+counter]
+	ctx_a1_spe = text[int(row['context1_speaker_index'].split(":")[0])+counter:int(row['context1_speaker_index'].split(":")[1])+counter_after]
 	if ctx_a1_spe.startswith(" "):
-		ctx_a1_spe = ctx_a1_spe.replace(" ", "", 1)
+		ctx_a1_spe = re.sub(r'^\s+', '', ctx_a1_spe)
 	### context-after 2
-	ctx_a2 = text[int(row['context2_index'].split(":")[0])+counter:int(row['context2_index'].split(":")[1])+counter]
+	ctx_a2 = text[int(row['context2_index'].split(":")[0])+counter:int(row['context2_index'].split(":")[1])+counter_after]
 	if ctx_a2.startswith(" "):
-		ctx_a2 = ctx_a2.replace(" ", "", 1)
+		ctx_a2 = re.sub(r'^\s+', '', ctx_a2)
 	### context-after 2 speaker
-	ctx_a2_spe = text[int(row['context2_speaker_index'].split(":")[0])+counter:int(row['context2_speaker_index'].split(":")[1])+counter]
+	ctx_a2_spe = text[int(row['context2_speaker_index'].split(":")[0])+counter:int(row['context2_speaker_index'].split(":")[1])+counter_after]
 	if ctx_a2_spe.startswith(" "):
-		ctx_a2_spe = ctx_a2_spe.replace(" ", "", 1)
+		ctx_a2_spe = re.sub(r'^\s+', '', ctx_a2_spe)
 	### label
 	label = row['label']
 	# write everything into the corresponding files
