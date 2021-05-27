@@ -41,7 +41,7 @@ df2 = pd.read_csv("cnn-6.csv", sep = ",")
 # open delivered file with the indices of the questions
 df_ids = pd.read_csv("mapped_indices.csv", sep = "\t")
 # open output file where the entire corpus will be written
-output = open("cnn_corpus_annotated_questions.csv", "w")
+output = open("cnn_corpus_all.csv", "w")
 # open output file where only the train split will be written
 output_train = open("cnn_corpus_train.csv", "w")
 # open output file where only the test split will be written
