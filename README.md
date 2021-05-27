@@ -9,6 +9,22 @@ If you use this corpus or software in any way, please include the above citation
 ## Annotation Guidelines
 
 ## Corpus
+Due to copyright reasons, the corpus cannot be provided directly. Instead, we provide a script with which the exact corpus can be retrieved from its source.
+In order to create the corpus, you should first download the CNN files made available by Sood, 2017: https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/ISDPJU
+After you have downloaded all 6 files, unzip them and put them in one folder. In the same folder, you have to also place the script *create_cnn_corpus.py* (found within the *scripts* folder) and the provided *mapped_indices.csv* file. After doing so, you can simply run the script by typing *python create_cnn_corpus.py*. If the script runs without any issues, you will have a file containing the entire corpus, a file containing the train split and a file containing the test split. The output files will be tab-separated and have the following structure:
+- ID: the unique ID of this question
+- ctxB2: the second sentence before the question
+- ctxB2_speaker: the speaker of ctxB2
+- ctxB1: the first sentence before the question
+- ctxB1_speaker: the speaker of ctxB1
+- question: the question under investigation
+- question_speaker: the speaker of the question
+- ctxA1: the first sentence after the question
+- ctxA1_speaker: the speaker of ctxA1
+- ctxA2: the second sentence after the question
+- ctxA2_speaker: the speaker of ctxA2
+- gold_label: the gold label for this question, as annotated within this work
+
 
 ## Models
 We make available the most significant models trained within this work. Specifically, we make available the following:
@@ -21,7 +37,7 @@ We make available the most significant models trained within this work. Specific
 - the best lexicalized model trained on the bigrams and trigrams of the surface forms and the POS tags of the question, of the first context-before and of the first context-after (found within the folder *models*)
 
 ## Scripts
-In the folder *scripts* you can find the main notebooks used for the fine-tuning of the BERT models and the training of the further classifiers. The notebook *Question_Type_Identification_Fine-tuning_BERT* can be used to reproduce our fine-tuning of the BERT models. You will also need the training and test set we make available in this repository. Our fine-tuned models can be downloaded from the above links. The embeddings we extracted from each of these models (the CLS embedding of the 11th layer) can be found in the folder *fine-tuned_bert_embeddings*. These embeddings files are also necessary to run the other notebook we make available *Question_Type_Identification_Training_Classifiers*. This notebook also uses the files found in the folder *simple_features_annotations*. 
+In the folder *scripts* you can find the main notebooks used for the fine-tuning of the BERT models and the training of the further classifiers. The notebook *Question_Type_Identification_Fine-tuning_BERT* can be used to reproduce our fine-tuning of the BERT models. You will also need the training and test set that our corpus creation script makes available. Our fine-tuned models can be downloaded from the above links. The embeddings we extracted from each of these models (the CLS embedding of the 11th layer) can be found in the folder *fine-tuned_bert_embeddings*. These embeddings files are also necessary to run the other notebook we make available *Question_Type_Identification_Training_Classifiers*. This notebook also uses the files found in the folder *simple_features_annotations*. The folder *scripts* also contains the script used for the creation of the corpus from its source files.  
 
 
 ## Contact
