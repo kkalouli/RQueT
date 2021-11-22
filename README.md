@@ -44,5 +44,5 @@ In the folder *scripts* you can find the main notebooks used for the fine-tuning
 
 
 ## Contact
-For any questions or comments, please write to aikaterini-lida.kalouli AT uni-konstanz DOT de
+For any questions or comments, please write to kalouli AT cis DOT lmu DOT de
  
